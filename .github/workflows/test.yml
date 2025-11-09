@@ -21,3 +21,5 @@ jobs:
           commit_message: 'Commit Test'
           file_pattern: '*'
           push_options: --force
+          commit_user_name: ${{ github.actor }}
+          commit_user_email: ${{ github.actor }}@users.noreply.github.com
