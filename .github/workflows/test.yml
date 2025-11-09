@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -15,11 +16,19 @@ jobs:
       - name: Update README
         run: echo test123 >> README.md
 
-      - name: Commit version prepare
-        uses: stefanzweifel/git-auto-commit-action@v6
+      # - name: Commit version prepare
+      #   uses: stefanzweifel/git-auto-commit-action@v6
+      #   with:
+      #     branchL: ''
+      #     commit_message: 'Commit Test'
+      #     file_pattern: '*'
+      #     push_options: --force
+      #     commit_user_name: ${{ github.actor }}
+      #     commit_user_email: ${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
         with:
-          commit_message: 'Commit Test'
-          file_pattern: '*'
-          push_options: --force
-          commit_user_name: ${{ github.actor }}
-          commit_user_email: ${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com
+          title: "Prepare Release"
+          branch: "prepare-release/123"
+          assignees: ${{ github.actor }}
