@@ -1,3 +1,7 @@
+name: test ci
+on:
+  workflow_dispatch:
+
 jobs:
   prepare-release:
     name: Test CI
