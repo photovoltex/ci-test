@@ -22,6 +22,10 @@ jobs:
       - name: Cache Rust dependencies
         uses: Swatinem/rust-cache@v2
 
+      - name: Install developer package dependencies (Linux)
+        run: >
+          choco install pkgconfiglite
+
       - name: Fetch dependencies
         run: cargo fetch --locked
 
