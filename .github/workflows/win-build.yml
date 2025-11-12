@@ -7,6 +7,7 @@ on:
 env:
   RUST_BACKTRACE: 1
   RUSTFLAGS: -D warnings
+  PKG_CONFIG_PATH: D:\gstreamer\1.0\msvc_x86_64\lib\pkgconfig
 
 jobs:
   build:
@@ -24,7 +25,7 @@ jobs:
 
       - name: Install developer package dependencies
         run: >
-          choco install pkgconfiglite gstreamer-devel gtk-runtime
+          choco install pkgconfiglite gstreamer-devel
 
       - name: Fetch dependencies
         run: cargo fetch --locked
