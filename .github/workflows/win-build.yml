@@ -26,12 +26,14 @@ jobs:
         uses: actions/cache@v4
         with:
           path: D:\gstreamer
-          key: gstreamer-windows-${{ hashFiles('**/Cargo.lock') }}
+          key: gstreamer-${{ runner }}-${{ hashFiles('**/Cargo.lock') }}
 
+      - name: Install pkg-config
+        run: choco install pkgconfiglite
 
-      - name: Install developer package dependencies
-        run: >
-          choco install pkgconfiglite gstreamer-devel
+      - name: Install gstreamer
+        if: ${{ hashFiles('assets/') == '' }}
+        run: choco install gstreamer-devel
 
       - name: Fetch dependencies
         run: cargo fetch --locked
