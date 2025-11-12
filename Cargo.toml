@@ -7,3 +7,8 @@ edition = "2024"
 gstreamer = { version = "0.24" }
 gstreamer-app = { version = "0.24" }
 gstreamer-audio = { version = "0.24" }
+
+rodio = "0.21.1"
+cpal = {version = "0.16.0", features = ["jack"]}
+portaudio-rs = "0.3.2"
+sdl2 = "0.38.0"
