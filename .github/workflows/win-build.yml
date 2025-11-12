@@ -9,7 +9,7 @@ env:
   RUST_BACKTRACE: 1
   RUSTFLAGS: -D warnings
   GSTREAMER_WIN_PATH: D:\gstreamer\
-  GSTREAMER_WIN_CACHE_KEY: gstreamer-windows-${{ hashFiles('**/Cargo.lock') }}
+  GSTREAMER_WIN_CACHE_KEY: gstreamer-windows
 
 jobs:
   lookup-cache:
@@ -24,7 +24,7 @@ jobs:
         with:
           lookup-only: 'true'
           path: ${{ env.GSTREAMER_WIN_PATH }}
-          key: ${{ env.GSTREAMER_WIN_CACHE_KEY }}
+          key: ${{ env.GSTREAMER_WIN_CACHE_KEY }}-${{ hashFiles('**/Cargo.lock') }}
 
   build:
     needs: lookup-cache
@@ -46,7 +46,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.GSTREAMER_WIN_PATH }}
-          key: ${{ env.GSTREAMER_WIN_CACHE_KEY }}
+          key: ${{ env.GSTREAMER_WIN_CACHE_KEY }}-${{ hashFiles('**/Cargo.lock') }}
 
       - run: echo "${{ needs.lookup-cache.outputs.gstreamer-cache }}"
 
