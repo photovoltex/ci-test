@@ -24,7 +24,7 @@ jobs:
 
       - name: Install developer package dependencies
         run: >
-          choco install pkgconfiglite gstreamer-devel
+          choco install pkgconfiglite gstreamer-devel gtk-runtime
 
       - name: Fetch dependencies
         run: cargo fetch --locked
