@@ -9,8 +9,23 @@ env:
   RUST_BACKTRACE: 1
   RUSTFLAGS: -D warnings
   GSTREAMER_WIN_PATH: D:\gstreamer\
+  GSTREAMER_WIN_CACHE_KEY: gstreamer-windows-${{ hashFiles('**/Cargo.lock') }}
 
 jobs:
+  lookup-cache:
+    name: lookup cache
+    runs-on: windows-latest
+    outputs:
+      gstreamer-cache: ${{ steps.gstreamer-lookup.outputs.cache-hit }}
+    steps:
+      - name: loop gstreamer cache
+        id: gstreamer-lookup
+        uses: actions/cache@v4
+        with:
+          lookup-only: 'true'
+          path: ${{ env.GSTREAMER_WIN_PATH }}
+          key: ${{ env.GSTREAMER_WIN_CACHE_KEY }}
+
   build:
     name: windows build
     runs-on: windows-latest
@@ -30,12 +45,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.GSTREAMER_WIN_PATH }}
-          key: gstreamer-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ env.GSTREAMER_WIN_CACHE_KEY }}
 
-      - run: echo "${{ hashFiles(env.GSTREAMER_WIN_PATH) }} ${{ hashFiles('D:\gstreamer\') }} ${{ hashFiles('D:\gstreamer') }}"
+      - run: echo "${{ jobs.lookup-cache.outputs.gstreamer-cache }}"
 
       - name: Install gstreamer
-        if: ${{ hashFiles(env.GSTREAMER_WIN_PATH) == '' }}
+        if: ${{ jobs.lookup-cache.outputs.gstreamer-cache != true }}
         run: choco install gstreamer-devel
 
       - name: Fetch dependencies
