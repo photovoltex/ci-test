@@ -3,10 +3,12 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 env:
   RUST_BACKTRACE: 1
   RUSTFLAGS: -D warnings
+  GSTREAMER_WIN_PATH: D:\gstreamer
 
 jobs:
   build:
@@ -17,22 +19,21 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Cache Rust dependencies
-        uses: Swatinem/rust-cache@v2
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
 
       - name: Cache gstreamer
         uses: actions/cache@v4
         with:
-          path: D:\gstreamer
-          key: gstreamer-${{ runner }}-${{ hashFiles('**/Cargo.lock') }}
+          path: ${{ env.GSTREAMER_WIN_PATH }}
+          key: gstreamer-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Install pkg-config
         run: choco install pkgconfiglite
 
       - name: Install gstreamer
-        if: ${{ hashFiles('assets/') == '' }}
+        if: ${{ hashFiles(env.GSTREAMER_WIN_PATH) == '' }}
         run: choco install gstreamer-devel
 
       - name: Fetch dependencies
@@ -40,5 +41,5 @@ jobs:
 
       - name: Build
         env:
-          PKG_CONFIG_PATH: D:\gstreamer\1.0\msvc_x86_64\lib\pkgconfig
+          PKG_CONFIG_PATH: ${{ env.GSTREAMER_WIN_PATH }}\1.0\msvc_x86_64\lib\pkgconfig
         run: cargo build --frozen
