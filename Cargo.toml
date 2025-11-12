@@ -1,0 +1,9 @@
+[package]
+name = "ci-test"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+gstreamer = { version = "0.24" }
+gstreamer-app = { version = "0.24" }
+gstreamer-audio = { version = "0.24" }
