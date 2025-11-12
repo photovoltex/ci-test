@@ -23,6 +23,13 @@ jobs:
       - name: Cache Rust dependencies
         uses: Swatinem/rust-cache@v2
 
+      - name: Cache gstreamer
+        uses: actions/cache@v4
+        with:
+          path: D:\gstreamer
+          key: gstreamer-windows-${{ hashFiles('**/Cargo.lock') }}
+
+
       - name: Install developer package dependencies
         run: >
           choco install pkgconfiglite gstreamer-devel
