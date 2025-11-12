@@ -8,7 +8,7 @@ on:
 env:
   RUST_BACKTRACE: 1
   RUSTFLAGS: -D warnings
-  GSTREAMER_WIN_PATH: D:\gstreamer
+  GSTREAMER_WIN_PATH: D:\gstreamer\
 
 jobs:
   build:
@@ -23,14 +23,16 @@ jobs:
         with:
           toolchain: stable
 
+      - name: Install pkg-config
+        run: choco install pkgconfiglite
+
       - name: Cache gstreamer
         uses: actions/cache@v4
         with:
           path: ${{ env.GSTREAMER_WIN_PATH }}
           key: gstreamer-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: Install pkg-config
-        run: choco install pkgconfiglite
+      - run: echo ${{ hashFiles(env.GSTREAMER_WIN_PATH) }} ${{ hashFiles('D:\gstreamer\') }} ${{ hashFiles('D:\gstreamer') }}
 
       - name: Install gstreamer
         if: ${{ hashFiles(env.GSTREAMER_WIN_PATH) == '' }}
@@ -41,5 +43,5 @@ jobs:
 
       - name: Build
         env:
-          PKG_CONFIG_PATH: ${{ env.GSTREAMER_WIN_PATH }}\1.0\msvc_x86_64\lib\pkgconfig
+          PKG_CONFIG_PATH: ${{ env.GSTREAMER_WIN_PATH }}1.0\msvc_x86_64\lib\pkgconfig
         run: cargo build --frozen
