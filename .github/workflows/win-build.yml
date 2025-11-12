@@ -27,6 +27,7 @@ jobs:
           key: ${{ env.GSTREAMER_WIN_CACHE_KEY }}
 
   build:
+    needs: lookup-cache
     name: windows build
     runs-on: windows-latest
     steps:
@@ -47,10 +48,10 @@ jobs:
           path: ${{ env.GSTREAMER_WIN_PATH }}
           key: ${{ env.GSTREAMER_WIN_CACHE_KEY }}
 
-      - run: echo "${{ jobs.lookup-cache.outputs.gstreamer-cache }}"
+      - run: echo "${{ needs.lookup-cache.outputs.gstreamer-cache }}"
 
       - name: Install gstreamer
-        if: ${{ jobs.lookup-cache.outputs.gstreamer-cache != true }}
+        if: ${{ needs.lookup-cache.outputs.gstreamer-cache != true }}
         run: choco install gstreamer-devel
 
       - name: Fetch dependencies
