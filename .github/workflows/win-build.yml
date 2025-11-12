@@ -32,7 +32,7 @@ jobs:
           path: ${{ env.GSTREAMER_WIN_PATH }}
           key: gstreamer-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
 
-      - run: echo ${{ hashFiles(env.GSTREAMER_WIN_PATH) }} ${{ hashFiles('D:\gstreamer\') }} ${{ hashFiles('D:\gstreamer') }}
+      - run: echo "${{ hashFiles(env.GSTREAMER_WIN_PATH) }} ${{ hashFiles('D:\gstreamer\') }} ${{ hashFiles('D:\gstreamer') }}"
 
       - name: Install gstreamer
         if: ${{ hashFiles(env.GSTREAMER_WIN_PATH) == '' }}
