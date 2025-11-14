@@ -12,3 +12,5 @@ rodio = "0.21.1"
 cpal = {version = "0.16.0", features = ["jack"]}
 portaudio-rs = "0.3.2"
 sdl2 = "0.38.0"
+
+dns-sd = "0.1.3"
