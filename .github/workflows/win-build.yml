@@ -24,7 +24,7 @@ jobs:
           toolchain: stable
 
       - name: Install pkg-config
-        run: choco install pkgconfiglite
+        run: choco install pkgconfiglite bonjour
 
       - name: Cache gstreamer
         uses: actions/cache@v4
