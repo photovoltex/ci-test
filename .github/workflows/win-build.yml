@@ -20,8 +20,7 @@ jobs:
           - ubuntu-latest
           - windows-latest
         exclude:
-          - os: ${{ 'ubuntu-latest' && github.ref_name == github.event.repository.default_branch }}
-    if: github.ref_name == github.event.repository.default_branch
+          - os: ${{ github.ref_name == github.event.repository.default_branch && 'ubuntu-latest' }}
     steps:
       - name: check output
         run: echo "${{ github.ref_name }} ${{ github.event.repository.default_branch }}"
