@@ -1,4 +1,4 @@
-name: win-build.yml
+name: primarily windows build
 on:
   push:
     branches:
@@ -13,7 +13,7 @@ env:
 
 jobs:
   build:
-    name: windows build
+    name: ${{ matrix.os }} build
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
