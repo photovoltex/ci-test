@@ -16,14 +16,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
+        os: [ubuntu-latest, windows-latest]
+        isDefault:
+          - ${{ github.ref_name == github.event.repository.default_branch }}
         exclude:
-          - os: ${{ github.ref_name == github.event.repository.default_branch && 'ubuntu-latest' }}
+          - isDefault: false
+            os: 'ubuntu-latest'
+
     steps:
-      - name: check output
-        run: echo "${{ github.ref_name }} ${{ github.event.repository.default_branch }}"
       - name: Checkout code
         uses: actions/checkout@v5
 
