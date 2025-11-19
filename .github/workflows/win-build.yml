@@ -14,11 +14,11 @@ env:
 jobs:
   build:
     name: windows build
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest ]
-    if: runner.os == 'Windows' || github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    if: contains(matrix.os, 'windows') || github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
