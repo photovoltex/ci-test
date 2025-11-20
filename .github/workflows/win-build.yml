@@ -1,8 +1,9 @@
 name: primarily windows build
 on:
   push:
-    branches:
+    branches: [dev]
   pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
   workflow_dispatch:
 
 env:
@@ -17,10 +18,11 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        isDefault:
-          - ${{ github.ref_name == github.event.repository.default_branch }}
+        isUbuntuCI:
+          - ${{ github.event.pull_request && contains(github.event.pull_request.labels.*.name, 'Ubuntu (CI)') }}
+        # excludes ubuntu, unless the label 'Ubuntu (CI)' is added
         exclude:
-          - isDefault: false
+          - isUbuntuCI: false
             os: 'ubuntu-latest'
 
     steps:
