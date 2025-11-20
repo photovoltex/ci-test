@@ -21,12 +21,12 @@ jobs:
         isPR:
           - ${{ github.event.pull_request }}
         labeledUbuntu:
-          - ${{ github.event.pull_request && contains(github.event.pull_request.labels.*.name, 'ubuntu') }}
+          - ${{ contains(github.event.pull_request.labels.*.name, format('CI{0} ubunut', ':')) }}
         # excludes ubuntu, unless the label 'Ubuntu (CI)' is added
         exclude:
-          - isPR: true
+          - os: 'ubuntu-latest'
+            isPR: true
             labeledUbuntu: false
-            os: 'ubuntu-latest'
 
     steps:
       - name: Checkout code
