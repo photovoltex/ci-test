@@ -18,11 +18,14 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        isUbuntuCI:
+        isPR:
+          - ${{ github.event.pull_request }}
+        labeledUbuntu:
           - ${{ github.event.pull_request && contains(github.event.pull_request.labels.*.name, 'Ubuntu (CI)') }}
         # excludes ubuntu, unless the label 'Ubuntu (CI)' is added
         exclude:
-          - isUbuntuCI: false
+          - isPR: true
+            labeledUbuntu: false
             os: 'ubuntu-latest'
 
     steps:
