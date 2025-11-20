@@ -22,7 +22,6 @@ jobs:
           - ${{ github.event.pull_request }}
         labeledUbuntu:
           - ${{ contains(github.event.pull_request.labels.*.name, format('CI{0} ubunut', ':')) }}
-        # excludes ubuntu, unless the label 'Ubuntu (CI)' is added
         exclude:
           - os: 'ubuntu-latest'
             isPR: true
