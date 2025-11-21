@@ -74,7 +74,7 @@ jobs:
 
       - name: Install dependencies (macOS)
         if: runner.os == 'macOS'
-        run: brew install portaudio
+        run: brew install gstreamer portaudio
 
       - name: Fetch dependencies
         run: cargo fetch --locked
