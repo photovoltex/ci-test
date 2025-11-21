@@ -1,4 +1,4 @@
-name: primarily windows build
+name: cross platform test
 on:
   push:
     branches: [main]
@@ -17,25 +17,36 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         isPR:
           - ${{ github.event_name == 'pull_request' }}
         labeledUbuntu:
           - ${{ github.event.pull_request && contains(github.event.pull_request.labels.*.name, format('CI{0} Ubuntu', ':')) }}
+        labeledMacOS:
+          - ${{ github.event.pull_request && contains(github.event.pull_request.labels.*.name, format('CI{0} macOS', ':')) }}
+        labeledWindows:
+          - ${{ github.event.pull_request && contains(github.event.pull_request.labels.*.name, format('CI{0} Windows', ':')) }}
         # excludes ubuntu, unless the label 'Ubuntu (CI)' is added
         exclude:
           - labeledUbuntu: false
             isPR: true
             os: 'ubuntu-latest'
+          - labeledMacOS: false
+            isPR: true
+            os: 'macos-latest'
+          - labeledWindows: false
+            isPR: true
+            os: 'windows-latest'
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
 
       - name: Install Rust toolchain
-        uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-          toolchain: stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
 
       - name: Install developer package dependencies (Linux)
         if: runner.os == 'Linux'
@@ -57,9 +68,13 @@ jobs:
           path: ${{ env.GSTREAMER_WIN_PATH }}
           key: gstreamer-windows-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: Install gstreamer
+      - name: Install gstreamer (Windows)
         if: ${{ !steps.cache-gstreamer.outputs.cache-hit && runner.os == 'Windows' }}
         run: choco install gstreamer-devel
+
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: brew install gstreamer portaudio
 
       - name: Fetch dependencies
         run: cargo fetch --locked
